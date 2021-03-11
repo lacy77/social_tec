@@ -7,9 +7,48 @@ function securisation ($input) { //XML ATTACK, SQL injection
 
 }
 
+if(isset($_POST['submit_btn'])) {
+    if(!empty($_POST['e_mail']) && !empty($_POST['pwd'])) {
+        $e_mail=securisation($_POST['e_mail']);
+        $pwd=($_POST['pwd']);
 
 
-session_start() ;
+        $req = $conn->prepare("SELECT * FROM member WHERE e_mail = ?");
+        $req->execute(array($e_mail));
+
+        
+
+        if($req->rowCount() == 1) {
+            $user_info = $req->fetch();
+
+            echo $_SESSION['name'];
+            if(password_verify($pwd, $user_info[3])) {
+
+                $_SESSION['id'] = $user_info['id'];
+
+                header('Location:fil_d_actu.php?id='.$_SESSION['id']); 
+                echo "ok";
+            } else {
+                echo "Ideantifiants incorrect";
+            }
+
+
+        } else {
+            echo "Ideantifiants inexistant";
+        }
+
+
+
+    } else 
+        echo "Les deux champs ne sont pas complétés!";
+}
+
+
+
+
+
+
+
 
 
 
@@ -23,32 +62,36 @@ session_start() ;
     </head>
 
     <body>
-        <form method="post" action='#'>
-            <div class="form">
-            <div class="form-toggle"></div>
-            <div class="form-panel one">
-                <div class="form-header">
-                <h1>Inscription - Social Tec</h1>
-                </div>
-                <div class="form-content">
-                <form>
-                    <div class="form-group">
-                    <label for="password">E-mail:</label>
-                    <input type="email" id="e-mail" name="e_mail" required="required"/>
-                    </div>
+        <div class="content">
 
-                    
-                    <div class="form-group">
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="pwd2" required="required"/>
-                    </div>
+            <form method="post" action='#'>
+                <div class="form">
+                    <div class="form-toggle"></div>
+                        <div class="form-panel one">
+                            <div class="form-header">
+                            <h1>Inscription - Social Tec</h1>
+                            </div>
+                            <div class="form-content">
+                            <form>
+                                <div class="form-group">
+                                <label for="e_mail">E-mail:</label>
+                                <input type="email" id="e-mail" name="e_mail" required="required"/>
+                                </div>
 
-                    <div class="form-group">
-                    <button type ="submit" value="soumettre" name='submit_btn' id="submit_btn">Se connecter</button>
-                    </div>
-                </form>
-                </div>
-            </div> 
+                                
+                                <div class="form-group">
+                                <label for="password">Mot de passe :</label>
+                                <input type="password" id="password" name="pwd" required="required"/>
+                                </div>
+
+                                <div class="form-group">
+                                <button type ="submit" value="soumettre" name='submit_btn' id="submit_btn">Se connecter</button>
+                                </div>
+                            </form>
+                        </div>
+                </div> 
+            </div>
+        </div>
             
             <!-- Footer   -->
 

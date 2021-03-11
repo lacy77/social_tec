@@ -1,4 +1,6 @@
 <?php
+
+session_start() ;
 require("db.php");
 function securisation ($input) { //XML ATTACK, SQL injection  
     $input = htmlspecialchars($input);
@@ -8,14 +10,13 @@ function securisation ($input) { //XML ATTACK, SQL injection
 
 
 
-session_start() ;
 if(isset($_POST['submit_btn'])) {
     if(!empty($_POST["user_name"]) AND !empty($_POST["e_mail"]) AND !empty($_POST["pwd1"]) AND !empty($_POST["pwd2"]) ) {
         $userName=securisation($_POST['user_name']);
         $e_mail=securisation($_POST['e_mail']);
         $pwd1=($_POST['pwd1']);
         $pwd2=($_POST['pwd2']);
-        $current_timestamp = date('Y-m-d H:i:s');;
+        $current_timestamp = date('Y-m-d H:i:s');
 
         $bio = $classe = "" ;
         $age =  0;
@@ -25,9 +26,9 @@ if(isset($_POST['submit_btn'])) {
         
         if($pwd1 == $pwd2) {
             if(strlen($pwd1) > 7) {
-                if(filter_var($e_mail, FILTER_VALIDATE_EMAIL)) {// is a valid email address
+                if(filter_var($e_mail, FILTER_VALIDATE_EMAIL)) {         // is a valid email address
                     if(preg_match("#^[a-z0-9A-Z_]{3,23}#i", $userName)){ //no special char on the name
-                        $pwd = password_hash($pwd1, PASSWORD_DEFAULT); //password_hash, salt depreciated
+                        $pwd = password_hash($pwd1, PASSWORD_DEFAULT);   //password_hash, salt depreciated
                         
                         $re = $conn->prepare("SELECT * FROM member where e_mail = ?");
                         $re->execute(array($e_mail));
@@ -35,6 +36,7 @@ if(isset($_POST['submit_btn'])) {
                             $insert_db =  $conn->prepare("INSERT INTO member (nom, e_mail, pwd, age, date_inscription, bio, classe) VALUES ( ?, ?, ?, ?, ?, ?, ?)");
                             $insert_db->execute(array($userName, $e_mail, $pwd,$age, $current_timestamp, $bio, $classe ));
                             echo 'connexion réussie';
+                            header("Location:connexion.php");
 
 
 
