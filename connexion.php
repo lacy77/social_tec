@@ -1,4 +1,5 @@
 <?php
+session_start();
 require("db.php");
 
 function securisation ($input) { //XML ATTACK, SQL injection  
@@ -21,7 +22,6 @@ if(isset($_POST['submit_btn'])) {
         if($req->rowCount() == 1) {
             $user_info = $req->fetch();
 
-            echo $_SESSION['name'];
             if(password_verify($pwd, $user_info[3])) {
 
                 $_SESSION['id'] = $user_info['id'];

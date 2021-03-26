@@ -17,6 +17,7 @@ if(isset($_POST['submit_btn'])) {
         $pwd1=($_POST['pwd1']);
         $pwd2=($_POST['pwd2']);
         $current_timestamp = date('Y-m-d H:i:s');
+        echo $current_timestamp;
 
         $bio = $classe = "" ;
         $age =  0;
