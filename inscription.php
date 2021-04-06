@@ -19,7 +19,8 @@ if(isset($_POST['submit_btn'])) {
         $current_timestamp = date('Y-m-d H:i:s');
         echo $current_timestamp;
 
-        $bio = $classe = "" ;
+        $bio = "pas de description";
+        $classe = "" ;
         $age =  0;
 
         settype($userName, "string"); //  type string
